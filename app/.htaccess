@@ -1,0 +1,2 @@
+#disallows visitors to view a list of files
+Options -Indexes
