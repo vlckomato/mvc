@@ -1,6 +1,6 @@
 <?php 
+require_once 'Core.php';
 
-echo 'hello'
-
+$core = new Core();
 
 ?>
