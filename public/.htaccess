@@ -1,4 +1,5 @@
 <IfModule mod_rewrite.c>
+Options -Multiviews
 RewriteEngine on
 RewriteBase /mvc/public
 # If not find file
@@ -6,5 +7,5 @@ RewriteCond %{REQUEST_FILENAME} !-f
 # if not find directory
 RewriteCond %{REQUEST_FILENAME} !-d
 #rewrite index.php?url=page to /page
-RewriteRule ^(.*)$ /index.php?url=$1 [L,QSA]
+RewriteRule ^(.+)$ /index.php?url=$1 [L,QSA]
 </IfModule>
