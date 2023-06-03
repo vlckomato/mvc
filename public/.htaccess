@@ -7,5 +7,5 @@ RewriteCond %{REQUEST_FILENAME} !-f
 # if not find directory
 RewriteCond %{REQUEST_FILENAME} !-d
 #rewrite index.php?url=page to /page
-RewriteRule ^(.+)$ /index.php?url=$1 [L,QSA]
+RewriteRule ^(.+)$ /index.php/$1 [L,QSA]
 </IfModule>
