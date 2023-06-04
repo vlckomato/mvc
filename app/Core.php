@@ -8,6 +8,8 @@ class Core {
     protected $method = '';
     protected $params = [];
 
+    protected $pattern = array();
+
     public function __construct(){
 
         $this->currentUrl = $this->getUrl();
@@ -17,24 +19,36 @@ class Core {
 
     public function getUrl() {
 
-        $url = filter_var($_SERVER['REQUEST_URI'], FILTER_SANITIZE_URL);
-
-    
-        if( $url === '/' ){
-
-            return '/';
-
-        } else {
-            
+        if (isset($_GET['path'])) {
+            $url = filter_var('/'.$_GET['path'], FILTER_SANITIZE_URL);
             return rtrim($url, '/');
-
-    }
+        } else {
+            return '/';
+        }
 }
 
 
     public static function get($name, $method) {
 
+        if (preg_match_all('/\[:([a-z]+)\]/',$name, $arr)) {
+            
+    
+                for($i = 0;$i < count($arr[0]);$i++) {
+                    $replacement = '(?<'.$arr[1][$i].'>[0-9]+)';
+                    $name = str_replace([$arr[0][$i], '/'], [$replacement, '\/'], $name);
+                } 
+
+                self::$routes[$name] = $method;
+
+
+           /*  $replacement = '(?<'.$arr[1].'>[0-9]+)';
+            $name = str_replace([$arr[0], '/'], [$replacement, '\/'], $name);
+            self::$routes[$name] = $method; */
+        }
+
         self::$routes[$name] = $method;
+
+
 
     }    
 
@@ -44,12 +58,12 @@ class Core {
 
     public function init() {
 
-        foreach(self::$routes as $route => $method) {
+    /*     foreach(self::$routes as $route => $method) {
             
             if(preg_match('/\{(.+)\}/', $route, $arr)) {
-                $pattern = 
+               
             }
-        }
+        } */
 
         if(array_key_exists($this->currentUrl, self::$routes)) {
             $arr = explode('@',self::$routes[$this->currentUrl]);
