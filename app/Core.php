@@ -8,7 +8,10 @@ class Core {
     protected $method = '';
     protected $params = [];
 
-    protected $pattern = array();
+    public static $pattern = array(
+        '[:id]' => '[0-9]+',
+        '[:name]' => '[a-z]+' 
+    );
 
     public function __construct(){
 
@@ -29,26 +32,18 @@ class Core {
 
 
     public static function get($name, $method) {
-
-        if (preg_match_all('/\[:([a-z]+)\]/',$name, $arr)) {
-            
-    
+        if (preg_match_all('/\/([a-z]+)\/(?=(\[:[a-z]+\]))/',$name, $arr)) {
+           
+            //var_dump($arr);
                 for($i = 0;$i < count($arr[0]);$i++) {
-                    $replacement = '(?<'.$arr[1][$i].'>[0-9]+)';
-                    $name = str_replace([$arr[0][$i], '/'], [$replacement, '\/'], $name);
+                
+                    $replacement = '(?<'.$arr[1][$i].'>'.self::$pattern[$arr[2][$i]].')';
+                    $name = str_replace([$arr[2][$i]], [$replacement], $name);
+                    
                 } 
-
-                self::$routes[$name] = $method;
-
-
-           /*  $replacement = '(?<'.$arr[1].'>[0-9]+)';
-            $name = str_replace([$arr[0], '/'], [$replacement, '\/'], $name);
-            self::$routes[$name] = $method; */
         }
-
+        $name = str_replace('/', '\/', $name);
         self::$routes[$name] = $method;
-
-
 
     }    
 
@@ -56,24 +51,27 @@ class Core {
         return self::$routes;
     }
 
+    public function filterArrayKeys($key) {
+        return is_string($key);
+    }
+
     public function init() {
 
-    /*     foreach(self::$routes as $route => $method) {
+    foreach(self::$routes as $route => $method) {
             
-            if(preg_match('/\{(.+)\}/', $route, $arr)) {
-               
+            if(preg_match('/^'.$route.'$/', $this->currentUrl, $arr)) {
+
+                $methods = explode('@',self::$routes[$route]);
+                $this->controller = $methods[0];
+                $this->method = $methods[1];
+                var_dump($arr);
+                if(count($arr)>1){
+
+                    $this->params = array_filter($arr, function ($arrayItem) { return is_string($arrayItem);},ARRAY_FILTER_USE_KEY);
+                   
+                }
             }
-        } */
-
-        if(array_key_exists($this->currentUrl, self::$routes)) {
-            $arr = explode('@',self::$routes[$this->currentUrl]);
-            $this->controller = $arr[0];
-            $this->method = $arr[1];
-        } else {
-
-
         }
-
 
 
         if(file_exists('../app/controller/'. ucfirst($this->controller) .'.php')){
@@ -86,10 +84,9 @@ class Core {
 
     if(method_exists($this->controller, $this->method)) {
 
-        call_user_func_array(array($this->controller,$this->method), []);
+        call_user_func_array(array($this->controller,$this->method), $this->params);
             
     } else {
-
         die('Method not exist');
     }
     }}

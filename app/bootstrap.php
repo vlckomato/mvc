@@ -4,14 +4,15 @@ require_once 'Core.php';
 $core = new Core();
 
 $core::get('/', 'page@test');
-$core::get('/a/[:id]/b/[:name]', 'controller@method2');
+$core::get('/a/[:id]/b/[:name]', 'page@test');
 $core::get('/b', 'test@test');
 
+$test = $core->staticValue();
+//var_dump($test);
 
 
 $core->init();
 
-$test = $core->staticValue();
-var_dump($test);
+
 
 ?>

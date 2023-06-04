@@ -3,11 +3,12 @@
 
 Class Page {
     public function __construct() {
-        echo 'hovno';
+      
     }
 
-    public function test() {
-        echo 'works greet';
+    public function test($id, $name) {
+      var_dump($id, $name);
+
     }
 }
 
