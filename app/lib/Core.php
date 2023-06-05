@@ -10,7 +10,7 @@ class Router {
 
     public  $pattern = array(
         '[:id]' => '[0-9]+',
-        '[:name]' => '[a-z]+' 
+        '[:name]' => '[a-zA-Z]+' 
     );
 
     public function __construct(){
@@ -31,25 +31,23 @@ class Router {
 
 
     public function get($name, $method) {
-        if (preg_match_all('/\/([a-z]+)\/(?=(\[:[a-z]+\]))/',$name, $match)) {
-        
-                for($i = 0;$i < count($match[0]);$i++) {
-                
-                    $replacement = '(?<'.$match[1][$i].'>'.$this->pattern[$match[2][$i]].')';
-                    $name = str_replace([$match[2][$i]], [$replacement], $name);
-                    
-                } 
+        foreach($this->pattern as $key => $value) {
+            $name = preg_replace('/'.preg_quote($key).'/', $value, $name);
         }
-        $name = str_replace('/', '\/', $name);
-        $this->routes[$name] = $method;
-
+        $this->routes[preg_quote($name)] = $method;
+        var_dump($this->routes);
     }    
+
+    public function notFound() {
+
+    }
 
     public function init() {
 
     foreach($this->routes as $route => $method) {
+        echo $route;
             
-            if(preg_match('/^'.$route.'$/', $this->url, $match)) {
+            if(preg_match('/'.$route.'/', $this->url, $match)) {
 
                 $list = explode('@',$this->routes[$route]);
                 $this->controller = $list[0];
