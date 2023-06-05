@@ -7,7 +7,14 @@ Class Page {
     }
 
     public function test($id, $name) {
-      var_dump($id, $name);
+    var_dump($id, $name);
+  
+
+    }
+
+    public function index() {
+
+      echo 'index';
 
     }
 }
