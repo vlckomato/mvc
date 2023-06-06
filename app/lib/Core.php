@@ -9,8 +9,8 @@ class Router {
     private $params = [];
 
     public  $pattern = array(
-        '[:id]' => '[0-9]+',
-        '[:name]' => '[a-zA-Z]+' 
+        '/\[\:id\]/' => '([0-9]+)',
+        '/\[\:name\]/' => '([a-zA-Z]+)' 
     );
 
     public function __construct(){
@@ -31,11 +31,10 @@ class Router {
 
 
     public function get($name, $method) {
-        foreach($this->pattern as $key => $value) {
-            $name = preg_replace('/'.preg_quote($key).'/', $value, $name);
-        }
-        $this->routes[preg_quote($name)] = $method;
-        var_dump($this->routes);
+    $name = preg_replace(array_keys($this->pattern), array_values($this->pattern), $name);
+        
+        $this->routes[$name] = $method;
+        
     }    
 
     public function notFound() {
@@ -45,17 +44,18 @@ class Router {
     public function init() {
 
     foreach($this->routes as $route => $method) {
-        echo $route;
-            
-            if(preg_match('/'.$route.'/', $this->url, $match)) {
 
+            
+            if(preg_match('@^'.$route.'$@', $this->url, $match)) {
+               //var_dump($match);
                 $list = explode('@',$this->routes[$route]);
                 $this->controller = $list[0];
                 $this->method = $list[1];
                 
                 if(count($match)>1){
-
-                    $this->params = array_filter($match, function ($arrayItem) { return is_string($arrayItem);},ARRAY_FILTER_USE_KEY);
+                    unset($match[0]);
+                    var_dump($match);
+                    $this->params = $match;
                
                 }
             }
