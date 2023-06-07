@@ -38,7 +38,9 @@ class Router {
     }    
 
     public function notFound() {
-
+        http_response_code(400);
+        include('../app/view/404.php');
+        exit();
     }
 
     public function init() {
@@ -62,20 +64,29 @@ class Router {
         }
 
 
-        if(file_exists('../app/controller/'. ucfirst($this->controller) .'.php')){
+       try { if(!file_exists('../app/controller/'. ucfirst($this->controller) .'.php')){
 
-            require_once '../app/controller/'. $this->controller .'.php';
+        throw new notFoundException();
 
-            $this->controller = new $this->controller;
+    } else { require_once '../app/controller/'. $this->controller .'.php';
 
-    } else ( die('Page dont exists') );
+    $this->controller = new $this->controller; } } catch (notFoundException $e) {
 
-    if(method_exists($this->controller, $this->method)) {
+        echo $e->methodNotFound();
+    }
+
+    try { if(!method_exists($this->controller, $this->method)) {
         
-        call_user_func_array(array($this->controller,$this->method), array_values($this->params));
+        throw new notFoundException();
 
         
     } else {
-        die('Method not exist');
+        call_user_func_array(array($this->controller,$this->method), array_values($this->params));
+
+    }
+
+} catch (notFoundException $e) {
+ 
+       echo $e->notFound();
     }
     }};
