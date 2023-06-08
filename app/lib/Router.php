@@ -10,7 +10,7 @@ class Router {
 
     public  $pattern = array(
         '/\[\:id\]/' => '([0-9]+)',
-        '/\[\:name\]/' => '([a-zA-Z]+)' 
+        '/\[\:name\]/' => '([a-zA-Z_-]+)' 
     );
 
     public function __construct(){
@@ -56,7 +56,6 @@ class Router {
                 
                 if(count($match)>1){
                     unset($match[0]);
-                    var_dump($match);
                     $this->params = $match;
                
                 }
@@ -64,29 +63,24 @@ class Router {
         }
 
 
-       try { if(!file_exists('../app/controller/'. ucfirst($this->controller) .'.php')){
+       if (!file_exists('../app/controller/'. ucfirst($this->controller) .'.php')){
 
-        throw new notFoundException();
+        $this->notFound();
 
-    } else { require_once '../app/controller/'. $this->controller .'.php';
-
-    $this->controller = new $this->controller; } } catch (notFoundException $e) {
-
-        echo $e->methodNotFound();
-    }
-
-    try { if(!method_exists($this->controller, $this->method)) {
+    } else { 
         
-        throw new notFoundException();
+        require_once '../app/controller/'. $this->controller .'.php';
 
+    $this->controller = new $this->controller; 
+    
+} 
+
+    if(!method_exists($this->controller, $this->method)) {
+        
+        $this->notFound();
         
     } else {
         call_user_func_array(array($this->controller,$this->method), array_values($this->params));
 
-    }
-
-} catch (notFoundException $e) {
- 
-       echo $e->notFound();
     }
     }};
