@@ -11,7 +11,7 @@ spl_autoload_register(function ($class_name) {
 $router = new Router();
 
 $router->get('/products', 'product@products');
-$router->get('/product/[:id]', 'product@products');
+$router->get('/product/[:id]', 'product@product');
 
 
 $router->init();
