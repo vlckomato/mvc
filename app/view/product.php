@@ -2,11 +2,15 @@
 <html>
 <body>
 
-<h1>Product page</h1>
+<h1>PRODUCTS:</h1>
 
 <?php
-echo 'Product id: '.$id;
+
+    echo '<h3> '.$data['name']. '</h3>';
+
+
 ?>
+
 
 </body>
 </html>
