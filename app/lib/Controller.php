@@ -8,6 +8,8 @@ class Controller {
             require_once('../app/model/'.$model.'.php'); 
          
          return new $model();
+        } else {
+            die('Model not exist');
         }
     }
 
@@ -15,7 +17,7 @@ class Controller {
         if (file_exists('../app/view/'.$view.'.php')){
            require_once('../app/view/'.$view.'.php'); 
         } else {
-            die('File not exist');
+            die('View not exist');
         }
     }
 
