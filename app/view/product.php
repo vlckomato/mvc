@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html>
+
 <body>
 
-<h1>PRODUCTS:</h1>
+    <h1>PRODUCTS:</h1>
 
-<?php
+    <?php
 
-    echo '<h3> '.$data['name']. '</h3>';
+    echo '<h3> ' . $data['name'] . '</h3>';
 
-
-?>
-
+    ?>
 
 </body>
+
 </html>

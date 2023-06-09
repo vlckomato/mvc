@@ -1,86 +1,81 @@
 <?
 
-class Router {
-
+class Router
+{
     private $routes = [];
     private $url = '';
     private $controller = '';
-    private $method = 'index';
+    private $method = '';
     private $params = [];
 
-    public  $pattern = array(
+    private $pattern = array(
         '/\[\:id\]/' => '([0-9]+)',
-        '/\[\:name\]/' => '([a-zA-Z_-]+)' 
+        '/\[\:name\]/' => '([a-zA-Z_-]+)'
     );
 
-    public function __construct(){
-
+    public function __construct()
+    {
         $this->url = $this->getUrl();
-
     }
 
-    public function getUrl() {
-
+    public function getUrl()
+    {
         if (isset($_GET['path'])) {
-            $url = filter_var('/'.$_GET['path'], FILTER_SANITIZE_URL);
+            $url = filter_var('/' . $_GET['path'], FILTER_SANITIZE_URL);
             return rtrim($url, '/');
         } else {
             return '/';
         }
-}
-
-
-    public function get($name, $method) {
-    $name = preg_replace(array_keys($this->pattern), array_values($this->pattern), $name);
-        
+    }
+    public function get($name, $method)
+    {
+        $name = preg_replace(array_keys($this->pattern), array_values($this->pattern), $name);
         $this->routes[$name] = $method;
-        
-    }    
+    }
 
-    public function notFound() {
+    public function notFound()
+    {
         http_response_code(400);
         include('../app/view/404.php');
         exit();
     }
-
-    public function init() {
-
-    foreach($this->routes as $route => $method) {
-
-            
-            if(preg_match('@^'.$route.'$@', $this->url, $match)) {
-               //var_dump($match);
-                $list = explode('@',$this->routes[$route]);
+    public function init()
+    {
+        foreach ($this->routes as $route => $method) {
+            if (preg_match('@^' . $route . '$@', $this->url, $match)) {
+                $list = explode('@', $this->routes[$route]);
                 $this->controller = $list[0];
                 $this->method = $list[1];
-                
-                if(count($match)>1){
+
+                if (count($match) > 1) {
                     unset($match[0]);
+                    var_dump($match);
                     $this->params = $match;
-               
+
                 }
             }
         }
 
 
-       if (!file_exists('../app/controller/'. ucfirst($this->controller) .'.php')){
+        if (!file_exists('../app/controller/' . ucfirst($this->controller) . '.php')) {
 
-        $this->notFound();
+            $this->notFound();
 
-    } else { 
-        
-        require_once '../app/controller/'. $this->controller .'.php';
+        } else {
 
-    $this->controller = new $this->controller; 
-    
-} 
+            require_once '../app/controller/' . $this->controller . '.php';
 
-    if(!method_exists($this->controller, $this->method)) {
-        
-        $this->notFound();
-        
-    } else {
-        call_user_func_array(array($this->controller,$this->method), array_values($this->params));
+            $this->controller = new $this->controller;
 
+        }
+
+        if (!method_exists($this->controller, $this->method)) {
+
+            $this->notFound();
+
+        } else {
+            call_user_func_array(array($this->controller, $this->method), array_values($this->params));
+
+        }
     }
-    }};
+}

@@ -3,7 +3,7 @@
 
 <body>
 
-    <h1>PAGE 404</h1>
+    <h1>HOMEPAGE</h1>
 
 </body>
 

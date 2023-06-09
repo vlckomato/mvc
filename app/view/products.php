@@ -1,17 +1,18 @@
 <!DOCTYPE html>
 <html>
+
 <body>
 
-<h1>PRODUCTS:</h1>
+    <h1>PRODUCTS:</h1>
 
-<?php
+    <?php
 
-    foreach($data as $product) {
-        echo '<h3> '.$product['name']. '</h3>';
+    foreach ($data as $product) {
+        echo '<h3> ' . $product['name'] . '</h3>';
     }
 
-?>
-
+    ?>
 
 </body>
+
 </html>
