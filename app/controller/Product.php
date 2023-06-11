@@ -15,7 +15,10 @@ class Product extends Controller
 
     public function product($id)
     {
-        $data = $this->db->getProduct($id);
-        $this->view("product", $data);
+        if (!$data = $this->db->getProduct($id)) {
+            die('Product with ID: ' .$id. ' not exist');
+        } else {
+            $this->view("product", $data);
+        };
     }
 }

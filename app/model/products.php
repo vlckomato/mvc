@@ -23,7 +23,7 @@ class Products
             foreach ($this->data as $key => $product) {
                   if ($product["id"] === $id) {
                         return $this->data[$key];
-                  }
+                  } 
             }
       }
 }

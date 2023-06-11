@@ -49,7 +49,6 @@ class Router
 
                 if (count($match) > 1) {
                     unset($match[0]);
-                    var_dump($match);
                     $this->params = $match;
 
                 }
