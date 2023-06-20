@@ -1,10 +1,6 @@
-<!DOCTYPE html>
-<html>
 
-<body>
+<?php require APPROOT . '/view/inc/header.php';?>
 
-    <h1>HOMEPAGE</h1>
+<h1>HOMEPAGE</h1>
 
-</body>
-
-</html>
+<?php require APPROOT . '/view/inc/footer.php';?>

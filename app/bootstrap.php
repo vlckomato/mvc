@@ -1,6 +1,8 @@
 <?php
 ini_set('display_errors', 1);
 
+require_once 'config/config.php';
+
 //require_once 'lib/Router.php';
 //require_once 'lib/Controller.php';
 
