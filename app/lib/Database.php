@@ -26,7 +26,7 @@
       }
     }
 
-    public function selectProducts($table, $id = null) {
+    public function select($table, $id = null) {
         if(isset($id)) {
             $sql = 'SELECT * FROM '. $table . ' WHERE Productid = :id';
             $this->stmt = $this->dbh->prepare($sql);
