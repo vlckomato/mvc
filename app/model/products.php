@@ -1,4 +1,19 @@
 <?php
+
+use Medoo\Medoo;
+
+$pdo = new PDO('mysql:dbname=products;host=localhost', 'root', 'root');
+ 
+$database = new Medoo([
+	// Initialized and connected PDO object.
+	'pdo' => $pdo,
+ 
+	// [optional] Medoo will have a different handle method according to different database types.
+	'type' => 'mysql'
+]);
+
+var_dump($database);
+
 class Products
 {
       private $data;
