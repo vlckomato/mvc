@@ -1,30 +1,19 @@
 <?php
 
-use Medoo\Medoo;
-
 class Products
 {
       private $db;
 
       public function __construct()
       {
-            $pdo = new PDO('mysql:dbname=products;host=localhost', 'root', 'root');
- 
-      $this->db = new Medoo([
-	// Initialized and connected PDO object.
-	'pdo' => $pdo,
- 
-	// [optional] Medoo will have a different handle method according to different database types.
-	'type' => 'mysql'
-]);
+            $this->db = new Database;
       }
 
       public function getAllProducts()
       {
-            $sth = $this->db->pdo->prepare('SELECT name FROM product');
-            $sth->execute();
-            $result = $sth->fetch(PDO::FETCH_BOTH);
-            var_dump($result);
+            $this->db->query("SELECT name FROM products");
+            $data = $this->db->resultSet();
+            echo json_encode($data);
             
 
       }
