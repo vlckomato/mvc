@@ -6,14 +6,13 @@ class Products
 
       public function __construct()
       {
-            $this->db = new Database;
+           // $this->db = new Database;
       }
 
       public function getAllProducts()
       {
             $this->db->query("SELECT name FROM products");
             $data = $this->db->resultSet();
-            echo json_encode($data);
             
 
       }

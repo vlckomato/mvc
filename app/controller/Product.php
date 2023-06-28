@@ -1,5 +1,7 @@
 <?php
 
+echo 'test';
+
 class Product extends Controller
 {
     private $db;
